@@ -24,8 +24,8 @@ fn init<S: HasStateApi>(
     _state_builder: &mut StateBuilder<S>,
 ) -> InitResult<State> {
     // Your code
-    let state = State {value: 0};
-    Ok(state)
+    let i_state = State {value: 0};
+    Ok(i_state)
 }
 
 /// Receive function. The input parameter is the boolean variable `throw_error`.
