@@ -24,8 +24,8 @@ fn init<S: HasStateApi>(
     _state_builder: &mut StateBuilder<S>,
 ) -> InitResult<State> {
     // Your code
-    let stored_state = State {value: 0};
-    Ok(stored_state)
+    let state = State {value: 0};
+    Ok(state)
 }
 
 /// Receive function. The input parameter is the boolean variable `throw_error`.
@@ -46,11 +46,11 @@ fn receive<S: HasStateApi>(
     let mut cursor = ctx.parameter_cursor();
     let should_change: bool = cursor.read_u8()? != 0;
     if should_change {
-        _host.stored_state = State {value: cursor.read_u32()?};
+        _host.state = State {value: cursor.read_u32()?};
     }
     let throw_error = ctx.parameter_cursor().get()?; // Returns Error::ParseError on failure
     if throw_error {
-        Err(Error::ParseError)
+        Err(Error::ParseParamsError)
     } else {
         Ok(())
     }
@@ -62,7 +62,7 @@ fn view<'a, 'b, S: HasStateApi>(
     _ctx: &'a impl HasReceiveContext,
     host: &'b impl HasHost<State, StateApiType = S>,
 ) -> ReceiveResult<&'b State> {
-    Ok(host.stored_state())
+    Ok(host.state())
 }
 
 #[concordium_cfg_test]
