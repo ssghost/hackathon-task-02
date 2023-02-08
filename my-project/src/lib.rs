@@ -46,7 +46,8 @@ fn receive<S: HasStateApi>(
     let mut cursor = ctx.parameter_cursor();
     let should_change: bool = cursor.read_u8()? != 0;
     if should_change {
-        _host.state = State {value: cursor.read_u32()?};
+        let _value = cursor.read_u32()?; 
+        *_host.state_mut() = State {value: _value};
     }
     let throw_error = ctx.parameter_cursor().get()?; // Returns Error::ParseError on failure
     if throw_error {
@@ -132,6 +133,6 @@ mod tests {
         let error: ContractResult<()> = receive(&ctx, &mut host);
 
         // Check the result.
-        claim_eq!(error, Err(Error::YourError), "Function should throw an error.");
+        claim_eq!(error, Err(Error::ParseParamsError), "Function should throw an error.");
     }
 }
