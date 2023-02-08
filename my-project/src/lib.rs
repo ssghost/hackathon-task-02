@@ -6,6 +6,7 @@ use core::fmt::Debug;
 #[derive(Serialize, SchemaType, Clone)]
 pub struct State {
     // Your state
+    value: u32,
 }
 
 /// Your smart contract errors.
@@ -15,7 +16,6 @@ enum Error {
     #[from(ParseError)]
     ParseParamsError,
     /// Your error
-    YourError,
 }
 
 /// Init function that creates a new smart contract.
@@ -25,8 +25,8 @@ fn init<S: HasStateApi>(
     _state_builder: &mut StateBuilder<S>,
 ) -> InitResult<State> {
     // Your code
-
-    Ok(State {})
+    let stored_state = State {value: 0};
+    Ok(stored_state)
 }
 
 /// Receive function. The input parameter is the boolean variable `throw_error`.
@@ -44,10 +44,14 @@ fn receive<S: HasStateApi>(
     _host: &mut impl HasHost<State, StateApiType = S>,
 ) -> Result<(), Error> {
     // Your code
-
+    let mut cursor = ctx.parameter_cursor();
+    let should_change: bool = cursor.read_u8()? != 0;
+    if should_change {
+        _host.stored_state = State {value: cursor.read_u32()?};
+    }
     let throw_error = ctx.parameter_cursor().get()?; // Returns Error::ParseError on failure
     if throw_error {
-        Err(Error::YourError)
+        Err(Error::ParseError)
     } else {
         Ok(())
     }
@@ -59,7 +63,7 @@ fn view<'a, 'b, S: HasStateApi>(
     _ctx: &'a impl HasReceiveContext,
     host: &'b impl HasHost<State, StateApiType = S>,
 ) -> ReceiveResult<&'b State> {
-    Ok(host.state())
+    Ok(host.stored_state())
 }
 
 #[concordium_cfg_test]
