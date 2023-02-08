@@ -15,7 +15,6 @@ enum Error {
     /// Failed parsing the parameter.
     #[from(ParseError)]
     ParseParamsError,
-    /// Your error
 }
 
 /// Init function that creates a new smart contract.
