@@ -9,6 +9,12 @@ pub struct State {
     value: u32,
 }
 
+#[derive(Serialize, SchemaType, Clone)]
+pub struct Param {
+    should: bool,
+    value: u32
+}
+
 /// Your smart contract errors.
 #[derive(Debug, PartialEq, Eq, Reject, Serial, SchemaType)]
 enum Error {
@@ -34,7 +40,7 @@ fn init<S: HasStateApi>(
 #[receive(
     contract = "my_project",
     name = "receive",
-    parameter = "bool",
+    parameter = "Param",
     error = "Error",
     mutable
 )]
@@ -43,18 +49,12 @@ fn receive<S: HasStateApi>(
     _host: &mut impl HasHost<State, StateApiType = S>,
 ) -> Result<(), Error> {
     // Your code
-    let mut cursor = ctx.parameter_cursor();
-    let should_change: bool = cursor.read_u8()? != 0;
-    if should_change {
-        let _value = cursor.read_u32()?; 
-        *_host.state_mut() = State {value: _value};
-    }
-    let throw_error = ctx.parameter_cursor().get()?; // Returns Error::ParseError on failure
-    if throw_error {
-        Err(Error::ParseParamsError)
-    } else {
-        Ok(())
-    }
+    let param: Param = ctx.parameter_cursor().get()?;
+    if param.should {
+        *_host.state_mut() = State {value: param.value};
+    } 
+    Ok(())
+
 }
 
 /// View function that returns the content of the state.
