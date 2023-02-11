@@ -1,0 +1,141 @@
+Contract:        trader
+Owner:           '4rc1tjHwkFB5JP39rcEeRqsh1gMJZerjjDpWoqqTY6VHy2WZgj'
+ModuleReference: '3cb436f4afe4af66325c53c814bab4604f9742b3b562730d84b26fd8e4f80a86'
+Balance:         0.000000 CCD
+State size:      28 bytes
+State:
+    {
+        "config": {
+            "inventory": {
+                "index": 2977,
+                "subindex": 0
+            },
+            "tax_percent": 1000
+        },
+        "lots": []
+    }
+Methods:
+- buy
+    Parameter:
+        {
+            "lot_id": "<UInt64>"
+        }
+- buy_callback
+    Parameter:
+        {
+            "amount": "<Amount>",
+            "creator": "<AccountAddress>",
+            "lot_id": "<UInt64>",
+            "quantity": "<UInt64>",
+            "royalty_percent": "<UInt64>",
+            "sender": {
+                "Enum": [
+                    {
+                        "Account": [
+                            "<AccountAddress>"
+                        ]
+                    },
+                    {
+                        "Contract": [
+                            {
+                                "index": "<UInt64>",
+                                "subindex": "<UInt64>"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "token_id": "<UInt64>"
+        }
+- close
+    Parameter:
+        {
+            "lot_id": "<UInt64>"
+        }
+- create
+    Parameter:
+        {
+            "royalty_percent": "<UInt64>",
+            "token_id": "<UInt64>",
+            "url": "<String>",
+            "value": "<UInt64>"
+        }
+- create_and_sell
+    Parameter:
+        {
+            "bid_additional_time": "<Duration>",
+            "lot_id": "<UInt64>",
+            "price": "<Amount>",
+            "royalty_percent": "<UInt64>",
+            "to_time": "<Timestamp>",
+            "token_id": "<UInt64>",
+            "url": "<String>",
+            "value": "<UInt64>"
+        }
+- finalize
+    Parameter:
+        {
+            "lot_id": "<UInt64>"
+        }
+- finalize_callback
+    Parameter:
+        {
+            "amount": "<Amount>",
+            "creator": "<AccountAddress>",
+            "lot_id": "<UInt64>",
+            "quantity": "<UInt64>",
+            "royalty_percent": "<UInt64>",
+            "sender": {
+                "Enum": [
+                    {
+                        "Account": [
+                            "<AccountAddress>"
+                        ]
+                    },
+                    {
+                        "Contract": [
+                            {
+                                "index": "<UInt64>",
+                                "subindex": "<UInt64>"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "token_id": "<UInt64>"
+        }
+- is_trader
+- pause
+    Parameter:
+        {
+            "lot_id": "<UInt64>"
+        }
+- sell
+    Parameter:
+        {
+            "bid_additional_time": "<Duration>",
+            "lot_id": "<UInt64>",
+            "price": "<Amount>",
+            "to_time": "<Timestamp>",
+            "token_id": "<UInt64>",
+            "value": "<UInt64>"
+        }
+- set_inventory
+    Parameter:
+        {
+            "inventory": {
+                "index": "<UInt64>",
+                "subindex": "<UInt64>"
+            }
+        }
+- set_tax_percent
+    Parameter:
+        {
+            "tax_percent": "<UInt64>"
+        }
+- withdrawal
+    Parameter:
+        {
+            "amount": "<Amount>",
+            "recipient": "<AccountAddress>"
+        }
