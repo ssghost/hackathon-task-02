@@ -28,9 +28,11 @@ enum Error {
 fn init<S: HasStateApi>(
     _ctx: &impl HasInitContext,
     _state_builder: &mut StateBuilder<S>,
+    _host: &mut impl HasHost<State, StateApiType = S>,
 ) -> InitResult<State> {
     // Your code
     let i_state = State {value: 0};
+    *_host.state_mut() = i_state;
     Ok(i_state)
 }
 
