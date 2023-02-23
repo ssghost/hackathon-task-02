@@ -42,11 +42,13 @@ fn init<S: HasStateApi>(
     name = "receive",
     parameter = "Param",
     error = "Error",
-    mutable
+    mutable,
+    payable
 )]
 fn receive<S: HasStateApi>(
     ctx: &impl HasReceiveContext,
     _host: &mut impl HasHost<State, StateApiType = S>,
+    _amount: Amount,
 ) -> Result<(), Error> {
     // Your code
     let param: Param = ctx.parameter_cursor().get()?;
@@ -104,7 +106,7 @@ mod tests {
         let mut host = TestHost::new(initial_state, state_builder);
 
         // Call the contract function.
-        let result: ContractResult<()> = receive(&ctx, &mut host);
+        let result: ContractResult<()> = receive(&ctx, &mut host, Amount{micro_ccd:10});
 
         // Check the result.
         claim!(result.is_ok(), "Results in rejection");
@@ -130,7 +132,7 @@ mod tests {
         let mut host = TestHost::new(initial_state, state_builder);
 
         // Call the contract function.
-        let error: ContractResult<()> = receive(&ctx, &mut host);
+        let error: ContractResult<()> = receive(&ctx, &mut host, Amount{micro_ccd:10});
 
         // Check the result.
         claim_eq!(error, Err(Error::ParseParamsError), "Function should throw an error.");
